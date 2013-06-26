@@ -24,66 +24,66 @@ public class project {
       }
      
       // Getter and Setter for Title
-      private void setTitle (String title) {
+      protected void setTitle (String title) {
             this.projectTitle = title;
       }
-      private String getTitle() {
+      protected String getTitle() {
             return projectTitle;
       }
      
       // Getter and Setter for Start Date
-      private void setStart(String sdate) {
+      protected void setStart(String sdate) {
             this.startDate = sdate;
       }
-      private String getSDate() {
+      protected String getSDate() {
             return startDate;
       }
      
       // Getter and Setter for End Date
-      private void setEnd(String edate) {
+      protected void setEnd(String edate) {
             this.endDate = edate;
       }
-      private String getEDate() {
+      protected String getEDate() {
             return endDate;
       }
      
       // Getter and Setter for Description
-      private void setDescription(String desc) {
+      protected void setDescription(String desc) {
             this.description = desc;
       }
-      private String getDescription() {
+      protected String getDescription() {
             return description;
       }
      
       // Bleep dee deep
-      private void setComments(String comm) {
+      protected void setComments(String comm) {
             this.comments = comm;
       }
-      private String getComments() {
+      protected String getComments() {
             return comments;
       }
      
       // More
-      private void setStatus(String stat) {
+      protected void setStatus(String stat) {
             this.status = stat;
       }
-      private String getStatus() {
+      protected String getStatus() {
             return status;
       }
      
       // F.I.N.A.L.L.Y.
-      private void setID(int i) {
+      protected void setID(int i) {
             this.id = i;
       }
-      private int getID() {
+      protected int getID() {
             return id;
       }
       
-      private void setEmployee(String emp){
+      protected void setEmployee(String emp){
     	  this.employee = emp;
       }
       
-      private String getEmployee(){
+      protected String getEmployee(){
     	  return employee;
       }
      
