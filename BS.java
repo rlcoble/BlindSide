@@ -303,6 +303,10 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 				JOptionPane.showMessageDialog(this,"The user that you entered was not found. Please try again.");
 			}
 		}
+
+		if(ae.getSource() == closeButton) {
+			employeeView.dispose();
+		}
 	}
 	
 	 public void mouseClicked(MouseEvent me) {
