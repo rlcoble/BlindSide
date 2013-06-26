@@ -12,26 +12,26 @@ public class project {
       
       // Constructor
       public project (String line) {
-           
-           //this.projectTitle = title;
-            //this.startDate = sdate;
-            //this.endDate = edate;
-            //this.description = desc;
-            //this.comments = comm;
-            //this.status = stat;
-            //this.id = idee;
+          this.projectTitle = line.substring(0, line.indexOf(" | "));
+          this.startDate = line.substring(line.indexOf(" | ")+3, line.indexOf(" || "));
+          this.endDate = line.substring(line.indexOf(" || ")+4, line.indexOf(" ||| "));
+          this.description = line.substring(line.indexOf(" ||| ")+5, line.indexOf(" |||| "));
+          this.comments = line.substring(line.indexOf(" |||| ")+6, line.indexOf(" ||||| "));
+          this.status = line.substring(line.indexOf(" ||||| ")+7, line.indexOf("|@|"));
+          this.employee = line.substring(line.indexOf(" |@| ")+5);
+          //this.id = BS.employees.get(index);
            
       }
+      
+      public project(){
+  		
+  	  }
      
       // Getter and Setter for Title
       protected void setTitle (String title) {
             this.projectTitle = title;
       }
-<<<<<<< HEAD
-      String getTitle() {
-=======
       protected String getTitle() {
->>>>>>> 90287f4dc29654026106a53e820fe8d782143246
             return projectTitle;
       }
      

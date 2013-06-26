@@ -17,7 +17,7 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 	static ArrayList<String> empNames				= new ArrayList<String>();
 	static ArrayList<String> projNames				= new ArrayList<String>();
 	JList names										= new JList(empNames.toArray());
-	JList projs										= new JList(projNames.toArray());
+	JList projs										= new JList(/*projNames.toArray()*/); //make show a subset of projNames
 	
 	JOptionPane	error								= new JOptionPane();
 	
@@ -100,9 +100,10 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 			if(f2.length() != 0){
 				FileReader fr2 		= new FileReader("projects.txt");
 				BufferedReader br2 	= new BufferedReader(fr2);
-				while((line = br2.readLine()) != null){
+				while((line2 = br2.readLine()) != null){
 					project p = new project(line2);
 					projects.add(p);
+					p.setID(projects.indexOf(p));
 				}
 				fr2.close();
 				br2.close();
@@ -264,15 +265,32 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		}
 		
 		if(ae.getSource() == saveButton){
+			project p = new project();
+			p.setTitle(titleTextField.getText());
+			p.setStart(startTextField.getText());
+			p.setEnd(endTextField.getText());
+			p.setDescription(descriptionTextArea.getText());
+			p.setComments(commentsTextArea.getText());
+			p.setStatus((String) statusList.getSelectedItem());
+			p.setEmployee(employeeTextField.getText());
+			projects.add(p);
+			p.setID(projects.indexOf(p));
+			for(int i = 0; i<employees.size(); i++){
+				if(employees.get(i).getName().equals(employeeTextField.getText())){
+					employees.get(i).setProjectIDs(projects.indexOf(p));
+				}
+			}
 			try {
 				FileWriter fw		= new FileWriter("projects.txt");
-				fw.append(titleTextField.getText()+" || "+startTextField.getText()+" || "+endTextField.getText()+" || "+descriptionTextArea.getText()+" || "+commentsTextArea.getText()+" || "+statusList.getSelectedItem());
+				fw.append(titleTextField.getText()+" | "+startTextField.getText()+" || "+endTextField.getText()+" ||| "+descriptionTextArea.getText()+" |||| "+commentsTextArea.getText()+" ||||| "+statusList.getSelectedItem()+" |@| "+employeeTextField.getText()+"\n");
+				projNames.add(titleTextField.getText());
+				projs.setListData(projNames.toArray());
 				fw.close();
 				addProjectPopup.dispose();
 			} 
 			
-			catch (IOException e) {
-				e.printStackTrace();
+			catch (IOException ioe) {
+				ioe.printStackTrace();
 			}
 		}
 		
