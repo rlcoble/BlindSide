@@ -8,9 +8,22 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
+
+//Delete button
+//First Name Last Name fields
+//Don't allow blank users
+//C00oloorss
+//ToLower() ALL ENTERED DATA
+//trim
+//add = green
+//delete = red
+//add new proj = green
+//close = red
+//save = green
+
 public class BS extends JFrame implements ActionListener, MouseListener{
 	private static final long serialVersionUID = 1L;
-	String[] statuses = {"", "Notified", "Started", "Almost Complete", "Complete"}; //if selectionIndex is 0, display error. or delete
+	String[] statuses = {"Notified", "Started", "Almost Complete", "Complete"}; //if selectionIndex is 0, display error. or delete
 	static ArrayList<employee> employees			= new ArrayList<employee>();
 	static ArrayList<project> projects				= new ArrayList<project>();
 	
@@ -116,6 +129,10 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		}
 		for(int i = 0; i<projects.size(); i++){
 			projNames.add(projects.get(i).getTitle());
+			for(int r = 0; r<employees.size(); r++){
+				if(employees.get(r).getName().equals(projects.get(i).getEmployee()))
+					employees.get(r).setProjectIDs(projects.get(i).getID());
+			}
 		}
 		
 		new BS();
@@ -151,6 +168,7 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		resetButton.addActionListener(this);
 		saveButton.addActionListener(this);
 		names.addMouseListener(this);
+		projs.addMouseListener(this);
 		addProjectButton.addActionListener(this);
 		closeButton.addActionListener(this);
 		
@@ -265,6 +283,12 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		}
 		
 		if(ae.getSource() == saveButton){
+			for(int t = 0; t<employees.size(); t++){
+				if(titleTextField.getText().equals(projects.get(t).getTitle())){
+					JOptionPane.showMessageDialog(this,"The project that you entered already exits. This issue will be addressed in future releases!");
+					return;
+				}
+			}
 			project p = new project();
 			p.setTitle(titleTextField.getText());
 			p.setStart(startTextField.getText());
@@ -281,12 +305,16 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 				}
 			}
 			try {
-				FileWriter fw		= new FileWriter("projects.txt");
+				FileWriter fw		= new FileWriter("projects.txt", true);
 				fw.append(titleTextField.getText()+" | "+startTextField.getText()+" || "+endTextField.getText()+" ||| "+descriptionTextArea.getText()+" |||| "+commentsTextArea.getText()+" ||||| "+statusList.getSelectedItem()+" |@| "+employeeTextField.getText()+"\n");
 				projNames.add(titleTextField.getText());
-				projs.setListData(projNames.toArray());
+				//projs.setListData(projNames.toArray());
 				fw.close();
+				
 				addProjectPopup.dispose();
+				employeeNameTextField.setText(employeeTextField.getText());
+				employeeView.dispose();
+				showButton.doClick();
 			} 
 			
 			catch (IOException ioe) {
@@ -303,15 +331,22 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 					employeeView.setLocationRelativeTo(null);
 					employeeTextField.setText(employees.get(i).getName());
 					employeeTextField.setEditable(false);
-					/*for(int i = 0; i<employees.size(); i++){
-					 	if(employees.get(i).getName().equals(empName)){
-						 	ArrayList<project> projs = employees.get(i).getProjects();
-						 	for(int z = 0; z<projs.size(); z++){
-							 
-						 	}
-					 	}
-				 	}*/
+					ArrayList<String> empProjs = new ArrayList<String>();
+					ArrayList<Integer> projIDs = employees.get(i).getProjectIDs();
+					for(int x = 0; x<employees.size(); x++){
+						if(employees.get(x).getName().equals(employeeTextField.getText())){
+							for(int z = 0; z<projIDs.size(); z++){
+								for(int j = 0; j<projects.size(); j++){
+									if(projIDs.get(z) == j){
+										empProjs.add(projects.get(j).getTitle());
+									}
+								}
+							}
+						}
+				 	}	
+					projs.setListData(empProjs.toArray());
 					employeeView.setVisible(true);
+				
 				}
 				else{
 					count += 1;
@@ -321,19 +356,52 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 				JOptionPane.showMessageDialog(this,"The user that you entered was not found. Please try again.");
 			}
 		}
-
-		if(ae.getSource() == closeButton) {
+		
+		if(ae.getSource() == closeButton){
 			employeeView.dispose();
 		}
 	}
 	
 	 public void mouseClicked(MouseEvent me) {
-		 if(me.getClickCount() == 2){
-			 int index = names.locationToIndex(me.getPoint());
-			 String empName = (String) names.getModel().getElementAt(index);
-			 employeeNameTextField.setText(empName);
-			 showButton.doClick();
-		 }
+		 if(me.getSource() == names){
+			 if(me.getClickCount() == 2){
+				 int index = names.locationToIndex(me.getPoint());
+				 String empName = (String) names.getModel().getElementAt(index);
+				 employeeNameTextField.setText(empName);
+				 showButton.doClick();
+			 }
+	 	}
+		 
+		 if(me.getSource() == projs){
+			 if(me.getClickCount() == 2){
+				int index = projs.locationToIndex(me.getPoint());
+				String projName = (String) projs.getModel().getElementAt(index);
+				addProjectPopup.setSize(500,500);
+				addProjectPopup.setLocationRelativeTo(null);
+				for(int i = 0; i<projects.size(); i++){
+					if(projects.get(i).getTitle().equals(projName)){
+						titleTextField.setText(projects.get(i).getTitle());
+						startTextField.setText(projects.get(i).getSDate());
+						endTextField.setText(projects.get(i).getEDate());
+						descriptionTextArea.setText(projects.get(i).getDescription());
+						commentsTextArea.setText(projects.get(i).getComments());
+						for(int j = 0; j<statuses.length; j++){
+							if(projects.get(i).getStatus().equals(statuses[j]+" "))
+								statusList.setSelectedIndex(j);
+						}
+					}
+				}
+				titleTextField.setEditable(false);
+				startTextField.setEditable(false);
+				endTextField.setEditable(false);
+				descriptionTextArea.setEditable(false);
+				commentsTextArea.setEditable(false);
+				statusList.setEnabled(false);
+				saveButton.setEnabled(false);
+				resetButton.setEnabled(false);
+				addProjectPopup.setVisible(true);
+			 }
+	 	}	 
 	 }
 
 	@Override
