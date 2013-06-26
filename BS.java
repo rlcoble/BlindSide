@@ -12,11 +12,12 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 	private static final long serialVersionUID = 1L;
 	String[] statuses = {"", "Notified", "Started", "Almost Complete", "Complete"}; //if selectionIndex is 0, display error. or delete
 	static ArrayList<employee> employees			= new ArrayList<employee>();
+	static ArrayList<project> projects				= new ArrayList<project>();
 	
 	static ArrayList<String> empNames				= new ArrayList<String>();
 	static ArrayList<String> projNames				= new ArrayList<String>();
 	JList names										= new JList(empNames.toArray());
-	JList projects									= new JList(projNames.toArray());
+	JList projs										= new JList(projNames.toArray());
 	
 	JOptionPane	error								= new JOptionPane();
 	
@@ -51,7 +52,7 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 	JTextArea commentsTextArea						= new JTextArea();
 	
 	JScrollPane displayScrollPane 	   				= new JScrollPane(names);
-	JScrollPane projectScrollPane					= new JScrollPane(projects);
+	JScrollPane projectScrollPane					= new JScrollPane(projs);
 	JScrollPane descScrollPane						= new JScrollPane(descriptionTextArea);
 	JScrollPane commScrollPane						= new JScrollPane(commentsTextArea);
 	
@@ -70,7 +71,10 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 	
 	public static void main(String[] args) throws Exception{
 		File f = new File("names.txt");
+		File f2 = new File("projects.txt");
 		String line = null;
+		String line2 = null;
+		
 		if(f.exists()){
 			if(f.length() != 0){
 				FileReader fr 		= new FileReader("names.txt");
@@ -79,6 +83,7 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 					employee e = new employee(line);
 					employees.add(e);
 				}
+				fr.close();
 				br.close();
 			}
 		}
@@ -90,6 +95,28 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		for(int i = 0; i<employees.size(); i++){
 			empNames.add(employees.get(i).getName());
 		}
+		
+		if(f2.exists()){
+			if(f2.length() != 0){
+				FileReader fr2 		= new FileReader("projects.txt");
+				BufferedReader br2 	= new BufferedReader(fr2);
+				while((line = br2.readLine()) != null){
+					project p = new project(line2);
+					projects.add(p);
+				}
+				fr2.close();
+				br2.close();
+			}
+		}
+		else{
+			FileWriter fw2		= new FileWriter("projects.txt");
+			fw2.write("");
+			fw2.close();
+		}
+		for(int i = 0; i<projects.size(); i++){
+			projNames.add(projects.get(i).getTitle());
+		}
+		
 		new BS();
 	}
 	
@@ -258,6 +285,14 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 					employeeView.setLocationRelativeTo(null);
 					employeeTextField.setText(employees.get(i).getName());
 					employeeTextField.setEditable(false);
+					/*for(int i = 0; i<employees.size(); i++){
+					 	if(employees.get(i).getName().equals(empName)){
+						 	ArrayList<project> projs = employees.get(i).getProjects();
+						 	for(int z = 0; z<projs.size(); z++){
+							 
+						 	}
+					 	}
+				 	}*/
 					employeeView.setVisible(true);
 				}
 				else{
@@ -271,7 +306,13 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 	}
 	
 	 public void mouseClicked(MouseEvent me) {
-     }
+		 if(me.getClickCount() == 2){
+			 int index = names.locationToIndex(me.getPoint());
+			 String empName = (String) names.getModel().getElementAt(index);
+			 employeeNameTextField.setText(empName);
+			 showButton.doClick();
+		 }
+	 }
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {

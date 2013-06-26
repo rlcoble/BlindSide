@@ -11,15 +11,15 @@ public class project {
       public String employee;
       
       // Constructor
-      public project (String title, String sdate, String edate, String desc, String comm, String stat, int idee) {
+      public project (String line) {
            
-            this.projectTitle = title;
-            this.startDate = sdate;
-            this.endDate = edate;
-            this.description = desc;
-            this.comments = comm;
-            this.status = stat;
-            this.id = idee;
+           //this.projectTitle = title;
+            //this.startDate = sdate;
+            //this.endDate = edate;
+            //this.description = desc;
+            //this.comments = comm;
+            //this.status = stat;
+            //this.id = idee;
            
       }
      
@@ -27,7 +27,7 @@ public class project {
       private void setTitle (String title) {
             this.projectTitle = title;
       }
-      private String getTitle() {
+      String getTitle() {
             return projectTitle;
       }
      
