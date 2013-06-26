@@ -262,6 +262,14 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		}
 		
 		if(ae.getSource() == resetButton){
+			resetButton.setEnabled(true);
+			saveButton.setEnabled(true);
+			titleTextField.setEditable(true);
+			startTextField.setEditable(true);
+			endTextField.setEditable(true);
+			descriptionTextArea.setEditable(true);
+			commentsTextArea.setEditable(true);
+			statusList.setEnabled(true);
 			titleTextField.setText("");
 			startTextField.setText("");
 			endTextField.setText("");
@@ -277,6 +285,8 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		}
 		
 		if(ae.getSource() == addProjectButton){
+			resetButton.setEnabled(true);
+			resetButton.doClick();
 			addProjectPopup.setSize(500,500);
 			addProjectPopup.setLocationRelativeTo(null);
 			addProjectPopup.setVisible(true);
