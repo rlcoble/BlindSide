@@ -6,21 +6,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
-public class BlindSide extends JFrame implements ActionListener{
+public class BlindSide extends JFrame implements ActionListener {
 
-  // Some random thing so it stops having an error
+	// Some random thing so it stops having an error
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	// Fields
 	JPanel namepanel;
 	JButton donebutt;
 	JButton addbutt;
 	JLabel bs;
-	
+
 	// Constructor
 	public BlindSide() {
 		namepanel = new JPanel();
@@ -32,6 +32,5 @@ public class BlindSide extends JFrame implements ActionListener{
 		namepanel.add(donebutt);
 		this.add(namepanel);
 	}
-	
-	
+
 }
