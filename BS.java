@@ -48,6 +48,7 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 	JTextField startTextField						= new JTextField("");
 	JTextField endTextField						    = new JTextField("");
 	JTextField employeeTextField					= new JTextField("");
+	JTextField usernameTextField					= new JTextField("");
 	
 	JTextArea descriptionTextArea					= new JTextArea();
 	JTextArea commentsTextArea						= new JTextArea();
@@ -67,6 +68,7 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 	JLabel statusLabel								= new JLabel("Status:");
 	JLabel employeeLabel							= new JLabel("Employee:");
 	JLabel projectsLabel							= new JLabel("Projects:");
+	JLabel usernameLabel							= new JLabel("Username");
 	
 	
 	
@@ -168,7 +170,7 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		trackerWindow.setVisible(true);
 		trackerWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		addProjectPopup.setLayout(new GridLayout(7,2,0,3));
+		addProjectPopup.setLayout(new GridLayout(8,2,0,3));
 		
 		addProjectPopup.add(titleLabel);
 		addProjectPopup.add(titleTextField);
@@ -194,7 +196,15 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		
 		addProjectPopup.add(statusLabel);
 		addProjectPopup.add(statusList);
-		commentsLabel.setLabelFor(statusList);		
+		commentsLabel.setLabelFor(statusList);	
+		
+		addProjectPopup.add(usernameLabel);
+		addProjectPopup.add(usernameTextField);
+		usernameLabel.setLabelFor(employeeTextField);
+		
+		employeeView.add(employeeLabel);
+		employeeView.add(employeeTextField);
+		employeeLabel.setLabelFor(employeeTextField);
 		
 		addProjectPopup.add(saveButton);
 		saveButton.setBackground(Color.GREEN);
@@ -202,10 +212,6 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		addProjectPopup.add(resetButton);	
 		
 		employeeView.setLayout(new GridLayout(3,2,0,3));
-		
-		employeeView.add(employeeLabel);
-		employeeView.add(employeeTextField);
-		employeeLabel.setLabelFor(employeeTextField);
 		
 		employeeView.add(projectsLabel);
 		employeeView.add(projectScrollPane);
@@ -324,7 +330,7 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 			}
 			try {
 				FileWriter fw = new FileWriter("projects.txt", true);
-				fw.append(titleTextField.getText().trim()+" | "+startTextField.getText().trim()+" || "+endTextField.getText().trim()+" ||| "+descriptionTextArea.getText().trim()+" |||| "+commentsTextArea.getText().trim()+" ||||| "+statusList.getSelectedItem()+" |@| "+employeeTextField.getText().trim()+"\n");
+				fw.append(titleTextField.getText().trim()+" | "+startTextField.getText().trim()+" || "+endTextField.getText().trim()+" ||| "+descriptionTextArea.getText().trim()+" |||| "+commentsTextArea.getText().trim()+" ||||| "+statusList.getSelectedItem()+ " |||||| "+usernameTextField.getText().trim() + " |@| "+employeeTextField.getText().trim()+"\n");
 				projNames.add(titleTextField.getText().trim());
 				//projs.setListData(projNames.toArray());
 				fw.close();

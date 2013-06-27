@@ -9,6 +9,7 @@ public class project {
       public String status;
       public int id;
       public String employee;
+      String username;
       
       // Constructor
       public project (String line) {
@@ -17,7 +18,8 @@ public class project {
           this.endDate = line.substring(line.indexOf(" || ")+4, line.indexOf(" ||| "));
           this.description = line.substring(line.indexOf(" ||| ")+5, line.indexOf(" |||| "));
           this.comments = line.substring(line.indexOf(" |||| ")+6, line.indexOf(" ||||| "));
-          this.status = line.substring(line.indexOf(" ||||| ")+7, line.indexOf("|@|"));
+          this.status = line.substring(line.indexOf(" ||||| ")+7, line.indexOf(" |||||| "));
+          this.username = line.substring(line.indexOf(" |||||| ")+8, line.indexOf("|@|"));
           this.employee = line.substring(line.indexOf(" |@| ")+5);
           //this.id = BS.employees.get(index);
            
@@ -89,6 +91,13 @@ public class project {
       
       protected String getEmployee(){
     	  return employee;
+      }
+      
+      protected String getUsername(){
+    	  return username;
+      }
+      protected void setUsername(String user) {
+    	  this.username = user;
       }
      
 }
