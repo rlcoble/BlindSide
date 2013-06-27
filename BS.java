@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,19 +8,6 @@ import java.io.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
-
-
-//Delete button
-//First Name Last Name fields
-//Don't allow blank users
-//C00oloorss
-//ToLower() ALL ENTERED DATA
-//trim
-//add = green
-//delete = red
-//add new proj = green
-//close = red
-//save = green
 
 public class BS extends JFrame implements ActionListener, MouseListener{
 	private static final long serialVersionUID = 1L;
@@ -54,8 +42,8 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 	JDialog addProjectPopup							= new JDialog();
 	JDialog employeeView							= new JDialog();
 	
-	JTextField employeeNameTextField				= new JTextField("");
-	JTextField newEmployeeNameTextField				= new JTextField("");
+	JTextField showTextField						= new JTextField("");
+	JTextField addEmployeeTextField					= new JTextField("");
 	JTextField titleTextField						= new JTextField("");
 	JTextField startTextField						= new JTextField("");
 	JTextField endTextField						    = new JTextField("");
@@ -64,13 +52,13 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 	JTextArea descriptionTextArea					= new JTextArea();
 	JTextArea commentsTextArea						= new JTextArea();
 	
-	JScrollPane displayScrollPane 	   				= new JScrollPane(names);
+	JScrollPane employeeScrollPane 	   				= new JScrollPane(names);
 	JScrollPane projectScrollPane					= new JScrollPane(projs);
 	JScrollPane descScrollPane						= new JScrollPane(descriptionTextArea);
 	JScrollPane commScrollPane						= new JScrollPane(commentsTextArea);
 	
-	JLabel employeeNameLabel						= new JLabel("Search Employees (Last,First):", SwingConstants.CENTER);
-	JLabel newEmployeeNameLabel						= new JLabel("Add Employee (Last,First):", SwingConstants.CENTER);
+	JLabel showLabel								= new JLabel("Search Employees (First Last):", SwingConstants.CENTER);
+	JLabel addEmployeeLabel							= new JLabel("Add Employee (First Last):", SwingConstants.CENTER);
 	JLabel titleLabel								= new JLabel("Project Title:");
 	JLabel startDateLabel							= new JLabel("Start Date:");
 	JLabel endDateLabel								= new JLabel("Projected End Date:");
@@ -142,22 +130,26 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		names.setVisible(false);
 		
 		topPanel.setLayout(new GridLayout(1,8));
-		topPanel.add(employeeNameLabel);
-		topPanel.add(employeeNameTextField);
+		topPanel.add(showLabel);
+		topPanel.add(showTextField);
 		topPanel.add(showButton);
 		topPanel.add(showAllButton);
 		topPanel.add(clearButton);
-		topPanel.add(newEmployeeNameLabel);
-		topPanel.add(newEmployeeNameTextField);
+		topPanel.add(addEmployeeLabel);
+		addEmployeeButton.setBackground(Color.GREEN);
+		addEmployeeButton.setOpaque(true);
+		topPanel.add(addEmployeeTextField);
 		topPanel.add(addEmployeeButton);
 		
 		
 		bottomPanel.setLayout(new GridLayout(1,1));
 		bottomPanel.add(deleteEmployeeButton);
+		deleteEmployeeButton.setBackground(Color.RED);
+		deleteEmployeeButton.setOpaque(true);
 		deleteEmployeeButton.setVisible(false);
 		
 		trackerWindow.getContentPane().add(topPanel,"North");
-		trackerWindow.getContentPane().add(displayScrollPane);
+		trackerWindow.getContentPane().add(employeeScrollPane);
 		trackerWindow.getContentPane().add(bottomPanel,"South");
 		
 		showButton.addActionListener(this);
@@ -205,6 +197,8 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		commentsLabel.setLabelFor(statusList);		
 		
 		addProjectPopup.add(saveButton);
+		saveButton.setBackground(Color.GREEN);
+		saveButton.setOpaque(true);
 		addProjectPopup.add(resetButton);	
 		
 		employeeView.setLayout(new GridLayout(3,2,0,3));
@@ -218,7 +212,11 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		employeeLabel.setLabelFor(projectScrollPane);
 		
 		employeeView.add(addProjectButton);
+		addProjectButton.setBackground(Color.GREEN);
+		addProjectButton.setOpaque(true);
 		employeeView.add(closeButton);
+		closeButton.setBackground(Color.RED);
+		closeButton.setOpaque(true);
 		
 	}
 	
@@ -231,20 +229,25 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		
 		if(ae.getSource() == addEmployeeButton){
 			for(int i = 0; i<employees.size(); i++){
-				if(newEmployeeNameTextField.getText().equals(employees.get(i).getName())){
+				if(addEmployeeTextField.getText().trim().toLowerCase().equals(employees.get(i).getName().trim().toLowerCase())){
 					JOptionPane.showMessageDialog(this,"The user that you entered already exits.");
+					return;
+				}
+				
+				if(addEmployeeTextField.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(this,"Please enter an employee name.");
 					return;
 				}
 			}
 			employee e = new employee();
-			e.setName(newEmployeeNameTextField.getText());
+			e.setName(addEmployeeTextField.getText().trim());
 			employees.add(e);
-			employeeNameTextField.setText(newEmployeeNameTextField.getText());
+			showTextField.setText(addEmployeeTextField.getText().trim());
 			FileWriter fw;
 			try {
 				fw = new FileWriter("names.txt", true);
-				fw.append(newEmployeeNameTextField.getText()+"\n");
-				empNames.add(newEmployeeNameTextField.getText());
+				fw.append(addEmployeeTextField.getText().trim()+"\n");
+				empNames.add(addEmployeeTextField.getText().trim());
 				names.setListData(empNames.toArray());
 				fw.close();
 			} 
@@ -252,12 +255,16 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 			catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			newEmployeeNameTextField.setText("");
+			addEmployeeTextField.setText("");
 			showButton.doClick();
 			names.setVisible(false);
 		}
 		
 		if(ae.getSource() == showAllButton){
+			if(employees.size() == 0){
+				JOptionPane.showMessageDialog(this,"There are no employees to show.");
+				return;
+			}
 			names.setVisible(true);
 		}
 		
@@ -279,9 +286,10 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		}
 		
 		if(ae.getSource() == clearButton){
-			employeeNameTextField.setText("");
-			newEmployeeNameTextField.setText("");
+			showTextField.setText("");
+			addEmployeeTextField.setText("");
 			names.setVisible(false);
+			//deleteEmployeeButton.setVisible(false);
 		}
 		
 		if(ae.getSource() == addProjectButton){
@@ -293,8 +301,8 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		}
 		
 		if(ae.getSource() == saveButton){
-			for(int t = 0; t<employees.size(); t++){
-				if(titleTextField.getText().equals(projects.get(t).getTitle())){
+			for(int t = 0; t<projects.size(); t++){
+				if(titleTextField.getText().trim().toLowerCase().equals(projects.get(t).getTitle().trim().toLowerCase())){
 					JOptionPane.showMessageDialog(this,"The project that you entered already exits. This issue will be addressed in future releases!");
 					return;
 				}
@@ -310,19 +318,19 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 			projects.add(p);
 			p.setID(projects.indexOf(p));
 			for(int i = 0; i<employees.size(); i++){
-				if(employees.get(i).getName().equals(employeeTextField.getText())){
+				if(employees.get(i).getName().trim().toLowerCase().equals(employeeTextField.getText().trim().toLowerCase())){
 					employees.get(i).setProjectIDs(projects.indexOf(p));
 				}
 			}
 			try {
-				FileWriter fw		= new FileWriter("projects.txt", true);
-				fw.append(titleTextField.getText()+" | "+startTextField.getText()+" || "+endTextField.getText()+" ||| "+descriptionTextArea.getText()+" |||| "+commentsTextArea.getText()+" ||||| "+statusList.getSelectedItem()+" |@| "+employeeTextField.getText()+"\n");
-				projNames.add(titleTextField.getText());
+				FileWriter fw = new FileWriter("projects.txt", true);
+				fw.append(titleTextField.getText().trim()+" | "+startTextField.getText().trim()+" || "+endTextField.getText().trim()+" ||| "+descriptionTextArea.getText().trim()+" |||| "+commentsTextArea.getText().trim()+" ||||| "+statusList.getSelectedItem()+" |@| "+employeeTextField.getText().trim()+"\n");
+				projNames.add(titleTextField.getText().trim());
 				//projs.setListData(projNames.toArray());
 				fw.close();
 				
 				addProjectPopup.dispose();
-				employeeNameTextField.setText(employeeTextField.getText());
+				showTextField.setText(employeeTextField.getText().trim());
 				employeeView.dispose();
 				showButton.doClick();
 			} 
@@ -334,17 +342,21 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 		
 		if(ae.getSource() == showButton){
 			int count = 0;
+			if(showTextField.getText().trim().equals("")){
+				JOptionPane.showMessageDialog(this,"Please enter an employee name.");
+				return;
+			}
 			for(int i = 0; i<employees.size(); i++){
-				if(employees.get(i).getName().equals(employeeNameTextField.getText())){
-					employeeNameTextField.setText("");
+				if(employees.get(i).getName().trim().toLowerCase().equals(showTextField.getText().trim().toLowerCase())){
+					showTextField.setText("");
 					employeeView.setSize(300,300);
 					employeeView.setLocationRelativeTo(null);
-					employeeTextField.setText(employees.get(i).getName());
+					employeeTextField.setText(employees.get(i).getName().trim());
 					employeeTextField.setEditable(false);
 					ArrayList<String> empProjs = new ArrayList<String>();
 					ArrayList<Integer> projIDs = employees.get(i).getProjectIDs();
 					for(int x = 0; x<employees.size(); x++){
-						if(employees.get(x).getName().equals(employeeTextField.getText())){
+						if(employees.get(x).getName().trim().toLowerCase().equals(employeeTextField.getText().trim().toLowerCase())){
 							for(int z = 0; z<projIDs.size(); z++){
 								for(int j = 0; j<projects.size(); j++){
 									if(projIDs.get(z) == j){
@@ -374,10 +386,14 @@ public class BS extends JFrame implements ActionListener, MouseListener{
 	
 	 public void mouseClicked(MouseEvent me) {
 		 if(me.getSource() == names){
+			 if(me.getClickCount() == 1){
+				 //deleteEmployeeButton.setVisible(true);
+			 }
+		 
 			 if(me.getClickCount() == 2){
 				 int index = names.locationToIndex(me.getPoint());
 				 String empName = (String) names.getModel().getElementAt(index);
-				 employeeNameTextField.setText(empName);
+				 showTextField.setText(empName);
 				 showButton.doClick();
 			 }
 	 	}
